@@ -1,7 +1,3 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
   <main>
     <!-- Hero Section -->
@@ -204,3 +200,7 @@ import TheWelcome from '../components/TheWelcome.vue'
     </section>
   </main>
 </template>
+
+<script setup>
+// No imports needed
+</script>
