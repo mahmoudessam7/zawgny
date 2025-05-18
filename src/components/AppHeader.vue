@@ -8,7 +8,7 @@
           </router-link>
         </div>
         
-        <nav class="hidden md:flex space-x-8">
+        <nav class="hidden md:flex">
           <router-link 
             to="/" 
             class="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"

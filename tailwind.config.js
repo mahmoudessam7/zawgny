@@ -8,6 +8,32 @@ export default {
     extend: {
       colors: {
         primary: {
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+          950: '#450a0a',
+        },
+        secondary: {
+          50: '#fefbf3',
+          100: '#fcf4df',
+          200: '#f9e8bf',
+          300: '#f5d592',
+          400: '#f0bc5e',
+          500: '#eaa636',
+          600: '#db852a',
+          700: '#b66723',
+          800: '#915223',
+          900: '#764520',
+          950: '#422411',
+        },
+        accent: {
           50: '#f0f9ff',
           100: '#e0f2fe',
           200: '#bae6fd',
@@ -19,24 +45,15 @@ export default {
           800: '#075985',
           900: '#0c4a6e',
           950: '#082f49',
-        },
-        secondary: {
-          50: '#fdf2f8',
-          100: '#fce7f3',
-          200: '#fbcfe8',
-          300: '#f9a8d4',
-          400: '#f472b6',
-          500: '#ec4899',
-          600: '#db2777',
-          700: '#be185d',
-          800: '#9d174d',
-          900: '#831843',
-          950: '#500724',
-        },
+        }
       },
       fontFamily: {
         arabic: ['Tajawal', 'sans-serif'],
       },
+      backgroundImage: {
+        'heart-pattern': "url('/images/heart-pattern.svg')",
+        'wedding-texture': "url('/images/wedding-texture.svg')"
+      }
     },
   },
   plugins: [],
