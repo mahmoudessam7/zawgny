@@ -45,8 +45,25 @@ Zawgny is a full-stack Islamic matrimonial website designed to help Muslim indiv
 - Python 3.10+
 - Git
 
-### Setup with Make (Recommended)
-The project includes a Makefile for easy setup:
+### Quick Start (Recommended)
+The project includes a start script for running both frontend and backend simultaneously:
+
+```bash
+# Clone the repository
+git clone https://github.com/mahmoudessam7/zawgny.git
+cd zawgny
+
+# Make the start script executable
+chmod +x start.sh
+
+# Run both frontend and backend with a single command
+./start.sh
+```
+
+This will start both the frontend (http://localhost:5173) and backend (http://localhost:8000) servers in the same terminal window. Press Ctrl+C to stop both servers.
+
+### Setup with Make
+The project includes a Makefile for setup and running individual services:
 
 ```bash
 # Clone the repository
