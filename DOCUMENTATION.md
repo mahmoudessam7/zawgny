@@ -103,43 +103,25 @@ The backend API will run on http://localhost:8000/api/
 
 ## Database Setup
 
-The application supports both SQLite (for development) and PostgreSQL (for production) databases.
+The application uses MySQL as its database system.
 
-### Using the Database Setup Script
+### Setting up MySQL
 
-A convenient script is provided to set up either database type:
-
-```bash
-# Navigate to the backend directory
-cd backend
-
-# Make the script executable
-chmod +x setup_database.sh
-
-# Run the setup script
-./setup_database.sh
+1. Install MySQL on your system if not already installed
+2. Create a MySQL database and user:
+```sql
+CREATE DATABASE zawgny;
+CREATE USER 'zawgny_user'@'localhost' IDENTIFIED BY 'zawgny_password';
+GRANT ALL PRIVILEGES ON zawgny.* TO 'zawgny_user'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
-The script will guide you through the setup process with the following options:
+3. Install the MySQL adapter for Django:
+```bash
+pip install mysqlclient
+```
 
-1. **SQLite (Development)**
-   - Automatically creates and initializes the SQLite database
-   - Runs all migrations
-   - Creates a superuser account for admin access
-
-2. **PostgreSQL (Production)**
-   - Checks if PostgreSQL is installed
-   - Prompts for database credentials
-   - Configures Django to use PostgreSQL
-   - Installs the necessary Python adapter (psycopg2)
-   - Runs all migrations
-   - Creates a superuser account for admin access
-
-### Manual Database Setup
-
-If you prefer to set up the database manually:
-
-#### SQLite (Development)
+4. Run migrations to set up the database schema:
 ```bash
 cd backend
 source venv/bin/activate
@@ -147,13 +129,6 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py createsuperuser
 ```
-
-#### PostgreSQL (Production)
-1. Install PostgreSQL on your system
-2. Create a database and user
-3. Configure Django settings in `zawgny_project/settings.py` or a local settings file
-4. Install the psycopg2 adapter: `pip install psycopg2-binary`
-5. Run migrations and create a superuser as above
 
 ## Development Workflow
 
