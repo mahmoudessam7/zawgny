@@ -249,17 +249,23 @@
               type="button" 
               @click="resetForm" 
               class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded ml-2"
+              :disabled="isSubmitting"
             >
               إعادة تعيين
             </button>
             <button 
               type="submit" 
               class="btn-primary"
-              :disabled="!formData.termsAccepted"
-              :class="{ 'opacity-50 cursor-not-allowed': !formData.termsAccepted }"
+              :disabled="!formData.termsAccepted || isSubmitting"
+              :class="{ 'opacity-50 cursor-not-allowed': !formData.termsAccepted || isSubmitting }"
             >
-              إرسال
+              <span v-if="isSubmitting">جاري الإرسال...</span>
+              <span v-else>إرسال</span>
             </button>
+          </div>
+          
+          <div v-if="error" class="mt-4 p-3 bg-red-100 text-red-700 rounded">
+            {{ error }}
           </div>
         </form>
       </div>
@@ -270,8 +276,38 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useProfileStore } from '@/stores/profile'
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  formData.value = {
+    fullName: 'محمود عصام',
+    age: 25,
+    height: 170,
+    profession: 'مبرمج',
+    education: 'bachelors',
+    income: 'very_high',
+    location: 'القاهرة, مصر',
+    religiousCommitment: 'high',
+    bio: 'محمود عصام هو مبرمج محترف ويمتلك خبرة واسعة في تطوير التطبيقات المتكاملة والأنظمة المتقدمة. يتمتع بقدرة في التعامل مع لغات البرمجة المختلفة والتطبيقات المتنوعة، مما يجعله من المطورين المثاليين للمشاريع المتطورة.',
+    email: 'mohamed@gmail.com',
+    phone: '01010101010',
+    termsAccepted: true,
+    preferredTraits: {
+      ageMin: 18,
+      ageMax: 35,
+      education: 'bachelors',
+      religiousCommitment: 'high',
+      otherPreferences: 'محمود عصام هو مبرمج محترف ويمتلك خبرة واسعة في تطوير التطبيقات المتكاملة والأنظمة المتقدمة. يتمتع بقدرة في التعامل مع لغات البرمجة المختلفة والتطبيقات المتنوعة، مما يجعله من المطورين المثاليين للمشاريع المتطورة.'
+    }
+  }
+})
+
 
 const router = useRouter()
+const authStore = useAuthStore()
+const profileStore = useProfileStore()
 
 const formData = ref({
   fullName: '',
@@ -295,13 +331,66 @@ const formData = ref({
   }
 })
 
-const submitForm = () => {
-  // Here you would typically send the form data to your backend
-  console.log('Form submitted:', formData.value)
+const isSubmitting = ref(false)
+const error = ref(null)
+
+const submitForm = async () => {
+  isSubmitting.value = true
+  error.value = null
   
-  // For now, we'll just simulate a successful submission and navigate to confirmation
-  alert('تم تسجيل بياناتك بنجاح. سيتم مراجعتها من قبل فريق المنصة.')
-  router.push('/')
+  try {
+    // Prepare user data for registration
+    const userData = {
+      email: formData.value.email,
+      password: 'defaultPassword123', // Simple default password for demo
+      firstName: formData.value.fullName.split(' ')[0],
+      lastName: formData.value.fullName.split(' ').slice(1).join(' ') || 'User'
+    }
+    
+    // Register user through auth store
+    const success = await authStore.register(userData)
+    
+    if (success) {
+      // Create profile data
+      const profileData = {
+        fullName: formData.value.fullName,
+        age: formData.value.age,
+        height: formData.value.height,
+        profession: formData.value.profession,
+        education: formData.value.education,
+        income: formData.value.income,
+        location: formData.value.location,
+        religiousCommitment: formData.value.religiousCommitment,
+        bio: formData.value.bio,
+        phone: formData.value.phone,
+        gender: 'M' // Groom
+      }
+      
+      // Update profile
+      await profileStore.updateProfile(profileData)
+      
+      // Create match preferences
+      const preferencesData = {
+        minAge: formData.value.preferredTraits.ageMin,
+        maxAge: formData.value.preferredTraits.ageMax,
+        preferredEducation: formData.value.preferredTraits.education,
+        preferredReligiousCommitment: formData.value.preferredTraits.religiousCommitment,
+        otherPreferences: formData.value.preferredTraits.otherPreferences
+      }
+      
+      await profileStore.updatePreferences(preferencesData)
+      
+      alert('تم تسجيل بياناتك بنجاح. سيتم مراجعتها من قبل فريق المنصة.')
+      router.push('/')
+    } else {
+      error.value = authStore.error || 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.'
+    }
+  } catch (err) {
+    console.error('Registration error:', err)
+    error.value = 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 const resetForm = () => {

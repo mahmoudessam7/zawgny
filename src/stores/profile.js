@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
-import { profileService } from '@/services/api';
 
 export const useProfileStore = defineStore('profile', {
   state: () => ({
-    profile: null,
-    preferences: null,
-    potentialMatches: [],
+    profile: JSON.parse(localStorage.getItem('profile')) || null,
+    preferences: JSON.parse(localStorage.getItem('preferences')) || null,
+    potentialMatches: JSON.parse(localStorage.getItem('potentialMatches')) || [],
     loading: false,
     error: null
   }),
@@ -22,12 +21,26 @@ export const useProfileStore = defineStore('profile', {
       this.loading = true;
       
       try {
-        const response = await profileService.getMyProfile();
-        this.profile = response.data;
+        // Simulate fetching profile data
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        if (!this.profile) {
+          this.profile = {
+            id: Date.now(),
+            age: 25,
+            gender: '',
+            bio: '',
+            location: '',
+            interests: [],
+            photos: []
+          };
+          localStorage.setItem('profile', JSON.stringify(this.profile));
+        }
+        
         this.loading = false;
       } catch (error) {
         this.loading = false;
-        this.error = error.response?.data || 'Failed to fetch profile';
+        this.error = error.message || 'Failed to fetch profile';
       }
     },
     
@@ -35,13 +48,17 @@ export const useProfileStore = defineStore('profile', {
       this.loading = true;
       
       try {
-        const response = await profileService.updateProfile(profileData);
-        this.profile = response.data;
+        // Simulate profile update
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        this.profile = { ...this.profile, ...profileData };
+        localStorage.setItem('profile', JSON.stringify(this.profile));
+        
         this.loading = false;
         return true;
       } catch (error) {
         this.loading = false;
-        this.error = error.response?.data || 'Failed to update profile';
+        this.error = error.message || 'Failed to update profile';
         return false;
       }
     },
@@ -50,12 +67,25 @@ export const useProfileStore = defineStore('profile', {
       this.loading = true;
       
       try {
-        const response = await profileService.getMatchPreferences();
-        this.preferences = response.data.length > 0 ? response.data[0] : null;
+        // Simulate fetching preferences
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        if (!this.preferences) {
+          this.preferences = {
+            id: Date.now(),
+            minAge: 18,
+            maxAge: 35,
+            preferredGender: '',
+            maxDistance: 50,
+            interests: []
+          };
+          localStorage.setItem('preferences', JSON.stringify(this.preferences));
+        }
+        
         this.loading = false;
       } catch (error) {
         this.loading = false;
-        this.error = error.response?.data || 'Failed to fetch preferences';
+        this.error = error.message || 'Failed to fetch preferences';
       }
     },
     
@@ -63,20 +93,17 @@ export const useProfileStore = defineStore('profile', {
       this.loading = true;
       
       try {
-        let response;
-        if (this.preferences) {
-          preferencesData.id = this.preferences.id;
-          response = await profileService.updatePreferences(preferencesData);
-        } else {
-          response = await profileService.updatePreferences(preferencesData);
-        }
+        // Simulate preferences update
+        await new Promise(resolve => setTimeout(resolve, 500));
         
-        this.preferences = response.data;
+        this.preferences = { ...this.preferences, ...preferencesData };
+        localStorage.setItem('preferences', JSON.stringify(this.preferences));
+        
         this.loading = false;
         return true;
       } catch (error) {
         this.loading = false;
-        this.error = error.response?.data || 'Failed to update preferences';
+        this.error = error.message || 'Failed to update preferences';
         return false;
       }
     },
@@ -85,12 +112,36 @@ export const useProfileStore = defineStore('profile', {
       this.loading = true;
       
       try {
-        const response = await profileService.getPotentialMatches();
-        this.potentialMatches = response.data;
+        // Simulate fetching potential matches
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        if (this.potentialMatches.length === 0) {
+          // Generate some mock data for demo purposes
+          this.potentialMatches = [
+            {
+              id: 1,
+              name: 'Sarah Johnson',
+              age: 28,
+              bio: 'Love hiking and photography',
+              location: 'Cairo',
+              photos: []
+            },
+            {
+              id: 2,
+              name: 'Ahmed Hassan',
+              age: 32,
+              bio: 'Software engineer passionate about technology',
+              location: 'Alexandria',
+              photos: []
+            }
+          ];
+          localStorage.setItem('potentialMatches', JSON.stringify(this.potentialMatches));
+        }
+        
         this.loading = false;
       } catch (error) {
         this.loading = false;
-        this.error = error.response?.data || 'Failed to fetch potential matches';
+        this.error = error.message || 'Failed to fetch potential matches';
       }
     },
     

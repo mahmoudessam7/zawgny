@@ -1,7 +1,7 @@
 # Zawgny - Technical Documentation
 
 ## Overview
-Zawgny is a full-stack Islamic matrimonial website designed to help Muslim individuals find suitable marriage partners according to Islamic principles. The application features user profiles, matching algorithms, communication tools, and admin moderation.
+Zawgny is a Vue.js Islamic matrimonial website designed to help Muslim individuals find suitable marriage partners according to Islamic principles. The application features user profiles, matching preferences, and a modern responsive interface with Arabic language support.
 
 ## Project Architecture
 
@@ -10,13 +10,8 @@ Zawgny is a full-stack Islamic matrimonial website designed to help Muslim indiv
 - State management using Pinia
 - Routing with Vue Router
 - Styling with Tailwind CSS
+- Data persistence using browser localStorage
 - Internationalization support
-
-### Backend (Django)
-- RESTful API built with Django and Django REST Framework
-- Token-based authentication
-- SQLite database (development) / PostgreSQL (production)
-- Media file handling with Pillow
 
 ## Technology Stack
 
@@ -27,26 +22,17 @@ Zawgny is a full-stack Islamic matrimonial website designed to help Muslim indiv
 | Tailwind CSS | 3.3.3 | Utility-first CSS framework |
 | Pinia | Latest | State management |
 | Vue Router | Latest | Client-side routing |
-| Axios | Latest | HTTP client for API requests |
-
-### Backend Libraries
-| Library | Version | Purpose |
-|---------|---------|---------|
-| Django | 5.2.1 | Web framework |
-| Django REST Framework | 3.16.0 | API development |
-| django-cors-headers | 4.7.0 | Handle CORS |
-| Pillow | 11.2.1 | Image processing |
+| Vite | Latest | Build tool and development server |
 
 ## Setup Instructions
 
 ### Prerequisites
 - Node.js (v16+)
 - npm or yarn
-- Python 3.10+
 - Git
 
 ### Quick Start (Recommended)
-The project includes a start script for running both frontend and backend simultaneously:
+The project includes a start script for running the development server:
 
 ```bash
 # Clone the repository
@@ -56,79 +42,35 @@ cd zawgny
 # Make the start script executable
 chmod +x start.sh
 
-# Run both frontend and backend with a single command
+# Run the development server
 ./start.sh
 ```
 
-This will start both the frontend (http://localhost:5173) and backend (http://localhost:8000) servers in the same terminal window. Press Ctrl+C to stop both servers.
+This will start the frontend development server at http://localhost:5173.
 
 ### Setup with Make
-The project includes a Makefile for setup and running individual services:
+The project includes a Makefile for setup and running the development server:
 
 ```bash
 # Clone the repository
 git clone https://github.com/mahmoudessam7/zawgny.git
 cd zawgny
 
-# Run the setup script (installs both frontend and backend dependencies)
+# Run the setup script (installs dependencies)
 make setup
 
-# Start the frontend server
-make frontend
-
-# In a separate terminal, start the backend server
-make backend
+# Start the development server
+make dev
 ```
 
 ### Manual Setup
 
-#### Frontend Setup
 ```bash
 # From the project root
 npm install
 npm run dev
 ```
-The frontend will run on http://localhost:5173
-
-#### Backend Setup
-```bash
-# From the project root
-cd backend
-chmod +x setup.sh
-./setup.sh
-source venv/bin/activate
-python3 manage.py runserver
-```
-The backend API will run on http://localhost:8000/api/
-
-## Database Setup
-
-The application uses MySQL as its database system.
-
-### Setting up MySQL
-
-1. Install MySQL on your system if not already installed
-2. Create a MySQL database and user:
-```sql
-CREATE DATABASE zawgny;
-CREATE USER 'zawgny_user'@'localhost' IDENTIFIED BY 'zawgny_password';
-GRANT ALL PRIVILEGES ON zawgny.* TO 'zawgny_user'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-3. Install the MySQL adapter for Django:
-```bash
-pip install mysqlclient
-```
-
-4. Run migrations to set up the database schema:
-```bash
-cd backend
-source venv/bin/activate
-python3 manage.py makemigrations
-python3 manage.py migrate
-python3 manage.py createsuperuser
-```
+The application will run on http://localhost:5173
 
 ## Development Workflow
 
@@ -137,7 +79,6 @@ The frontend is a Vue 3 application with the following structure:
 - `src/components/` - Reusable UI components
 - `src/views/` - Page components
 - `src/stores/` - Pinia state stores
-- `src/services/` - API service interfaces
 - `src/router/` - Route definitions
 - `src/assets/` - Static assets
 
@@ -145,78 +86,80 @@ To add a new feature:
 1. Create necessary components in `src/components/`
 2. Add new views if needed in `src/views/`
 3. Update the router in `src/router/`
-4. Add any API services in `src/services/`
+4. Add state management in `src/stores/` if needed
 
-### Backend Development
-The backend is a Django application with:
-- `api/` - Main Django app with models, views, and serializers
-- `zawgny_project/` - Django project settings
+### Data Storage
+The application uses browser localStorage for data persistence:
+- User authentication state
+- Profile information
+- Match preferences
+- Mock potential matches data
 
-Key models include:
-- User authentication (Django's built-in User)
-- Profile
-- MatchPreference
-- MatchRequest
-- Conversation
-- Message
+## Application Features
 
-API endpoints are defined using Django REST Framework and follow RESTful principles.
+### Current Features
+- User registration and authentication (localStorage-based)
+- Profile creation and management
+- Match preferences specification
+- Viewing potential matches (mock data)
+- Responsive design with Arabic language support
+- Modern UI with Tailwind CSS
 
-## API Documentation
-
-The backend provides the following RESTful API endpoints:
-
-### Authentication
-- `POST /api/register/` - Register a new user
-- `POST /api/login/` - Authenticate user and get token
-
-### Profiles
-- `GET /api/profiles/my_profile/` - Get current user's profile
-- `PATCH /api/profiles/:id/` - Update a profile
-- `GET /api/profiles/potential_matches/` - Get potential matches
-
-### Match Preferences
-- `GET /api/preferences/` - Get user's match preferences
-- `POST /api/preferences/` - Create match preferences
-- `PATCH /api/preferences/:id/` - Update match preferences
-
-### Match Requests
-- `GET /api/match-requests/` - List user's match requests
-- `POST /api/match-requests/` - Send a match request
-- `POST /api/match-requests/:id/accept/` - Accept a match request
-- `POST /api/match-requests/:id/reject/` - Reject a match request
-
-### Messaging
-- `GET /api/conversations/` - List user's conversations
-- `GET /api/messages/?conversation=:id` - Get messages for a conversation
-- `POST /api/messages/` - Send a new message
+### State Management
+The application uses Pinia stores for:
+- `auth.js` - User authentication and session management
+- `profile.js` - User profiles, preferences, and potential matches
+- `counter.js` - Example counter store
 
 ## Deployment
 
 ### Frontend Deployment
 1. Build the production version: `npm run build`
 2. The output will be in the `dist/` directory
-3. Deploy these static files to your web hosting service
+3. Deploy these static files to your web hosting service (Netlify, Vercel, etc.)
 
-### Backend Deployment
-1. Configure production settings in `zawgny_project/settings.py`
-2. Set up a PostgreSQL database
-3. Configure environment variables for sensitive information
-4. Deploy to a server using Gunicorn and Nginx
+### Environment Configuration
+The application is configured for development by default. For production:
+1. Update any hardcoded URLs if needed
+2. Configure proper error handling
+3. Optimize build settings in `vite.config.js`
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Backend server not starting**
-   - Ensure Python 3.10+ is installed
-   - Try using `python3` instead of `python` commands
-   - Check virtual environment is activated
-
-2. **Frontend build issues**
+1. **Development server not starting**
+   - Ensure Node.js 16+ is installed
    - Clear node_modules: `rm -rf node_modules`
    - Reinstall dependencies: `npm install`
 
-3. **CORS errors**
-   - Verify CORS settings in Django settings.py
-   - Check the API_URL in the frontend configuration 
+2. **Build issues**
+   - Check for TypeScript/JavaScript errors
+   - Verify all imports are correct
+   - Run `npm run build` to check for build errors
+
+3. **Styling issues**
+   - Verify Tailwind CSS is properly configured
+   - Check `tailwind.config.js` for custom configurations
+   - Ensure PostCSS is working correctly
+
+## Project Structure
+
+```
+zawgny/
+├── src/
+│   ├── components/     # Reusable Vue components
+│   ├── views/         # Page components
+│   ├── stores/        # Pinia state stores
+│   ├── router/        # Vue Router configuration
+│   ├── assets/        # Static assets
+│   ├── App.vue        # Root component
+│   └── main.js        # Application entry point
+├── public/            # Public static files
+├── package.json       # Dependencies and scripts
+├── vite.config.js     # Vite configuration
+├── tailwind.config.js # Tailwind CSS configuration
+├── Makefile          # Build and development commands
+├── start.sh          # Quick start script
+└── README.md         # Project documentation
+``` 

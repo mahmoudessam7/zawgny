@@ -1,14 +1,12 @@
 # Zawgny - Islamic Matrimonial Site
 
-A full-stack matrimonial site built with Vue.js and Django, designed to help Muslim individuals find suitable marriage partners according to Islamic principles.
+A Vue.js matrimonial site designed to help Muslim individuals find suitable marriage partners according to Islamic principles.
 
 ## Project Structure
 
-The project is organized as follows:
-- `/` - Vue.js frontend (root directory)
-- `/backend` - Django REST API backend
+The project is a Vue.js frontend application with local storage for data persistence.
 
-## Frontend Setup
+## Setup
 
 1. Install dependencies:
 ```
@@ -20,52 +18,43 @@ npm install
 npm run dev
 ```
 
-The frontend will be available at http://localhost:5173
+The application will be available at http://localhost:5173
 
-## Backend Setup
+## Quick Start
 
-1. Change to the backend directory:
-```
-cd backend
-```
+You can also use the provided scripts:
 
-2. Run the setup script:
-```
-./setup.sh
-```
+```bash
+# Setup the project
+make setup
 
-3. Activate the virtual environment and run the server:
+# Start development server
+make dev
+# or
+./start.sh
 ```
-source venv/bin/activate
-python3 manage.py runserver
-```
-
-The API will be available at http://localhost:8000/api/
 
 ## Features
 
-- User registration and authentication
+- User registration and authentication (localStorage-based)
 - Profile creation and management
 - Match preferences specification
-- Finding potential matches
-- Sending and responding to match requests
-- Secure messaging between matched users
-- Admin moderation and verification
+- Finding potential matches (mock data)
+- Responsive design with Arabic language support
+- Modern UI with Tailwind CSS
 
 ## Development
 
-To work on this project:
-
-1. Start the backend server in one terminal
-2. Start the frontend server in another terminal
-3. Both will communicate via the API endpoints
-
-## API Endpoints
-
-See `/backend/README.md` for detailed API documentation.
+The application uses:
+- Vue 3 Composition API
+- Pinia for state management
+- Vue Router for navigation
+- Tailwind CSS for styling
+- Local storage for data persistence
 
 ## Technologies Used
 
-- **Frontend**: Vue 3, Tailwind CSS, Pinia
-- **Backend**: Django, Django REST Framework
-- **Database**: SQLite (development), PostgreSQL (production)
+- **Frontend**: Vue 3, Tailwind CSS, Pinia, Vue Router
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS with RTL support
+- **Data Storage**: Browser localStorage
